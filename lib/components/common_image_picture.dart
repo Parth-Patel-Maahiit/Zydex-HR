@@ -11,6 +11,7 @@ class CommonImagePicture extends StatelessWidget {
     this.semanticsLabel,
     this.size,
     this.isString = false,
+    this.isurl = false,
     this.type,
     this.color,
   });
@@ -18,6 +19,7 @@ class CommonImagePicture extends StatelessWidget {
   final String? semanticsLabel;
   final double? size;
   final bool isString;
+  final bool isurl;
   final String? type;
   final Color? color;
 
@@ -60,21 +62,29 @@ class CommonImagePicture extends StatelessWidget {
                           fit: BoxFit.scaleDown,
                           semanticsLabel: '$semanticsLabel',
                         )
-                  : isString
-                      ? Image.file(
-                          File(name!),
-                          height: size,
-                          width: size,
-                          color: color,
-                          fit: BoxFit.scaleDown,
-                        )
-                      : Image.asset(
+                  : isurl
+                      ? Image.network(
                           name!,
                           height: size,
                           width: size,
                           color: color,
                           fit: BoxFit.scaleDown,
                         )
+                      : isString
+                          ? Image.file(
+                              File(name!),
+                              height: size,
+                              width: size,
+                              color: color,
+                              fit: BoxFit.scaleDown,
+                            )
+                          : Image.asset(
+                              name!,
+                              height: size,
+                              width: size,
+                              color: color,
+                              fit: BoxFit.scaleDown,
+                            )
               : const SizedBox(
                   height: 0,
                   width: 0,

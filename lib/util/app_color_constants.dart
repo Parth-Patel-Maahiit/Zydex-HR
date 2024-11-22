@@ -22,6 +22,12 @@ class AppColorConstants {
   static const Color _hintTextLight = black40;
   static const Color _hintTextDark = Color.fromARGB(255, 187, 185, 185);
 
+  static const Color _backGroundLight = Color(0xFFDDDDDD);
+  static const Color _backGroundDark = Color(0xFF121212);
+
+  static const Color _backGroundIconDark = Color.fromARGB(54, 221, 221, 221);
+  static const Color _backGroundIconLight = Color.fromARGB(34, 18, 18, 18);
+
   // Dynamic Colors
   static Color get baseBG =>
       Get.find<ThemeController>().isDarkMode.value ? _baseBGDark : _baseBGLight;
@@ -44,8 +50,20 @@ class AppColorConstants {
 
   static Color get baseBlackWhite =>
       Get.find<ThemeController>().isDarkMode.value
-          ? Colors.white
-          : Colors.black;
+          ? Colors.black
+          : Colors.white;
+
+  static Color get backGround => Get.find<ThemeController>().isDarkMode.value
+      ? _backGroundDark
+      : _backGroundLight;
+
+  static Color get backGroundIcon =>
+      Get.find<ThemeController>().isDarkMode.value
+          ? _backGroundIconDark
+          : _backGroundIconLight;
+
+  static Color get textnormalColor =>
+      Get.find<ThemeController>().isDarkMode.value ? white80 : black80;
 
   //------------------- CORE COLOURS ------------------------//
   static const Color brightBlue = Color(0xFF087CE7);
@@ -79,6 +97,15 @@ class AppColorConstants {
   static const Color black10 = Color(0x1A000000);
   static const Color black5 = Color(0x0D000000);
 
+  //-------------------- white HUe colours ---------------------//
+  static const Color white100 = Color(0xFFFFFFFF); // Fully opaque white
+  static const Color white80 = Color(0xCCFFFFFF); // 80% opacity white
+  static const Color white60 = Color(0x99FFFFFF); // 60% opacity white
+  static const Color white40 = Color(0x66FFFFFF); // 40% opacity white
+  static const Color white20 = Color(0x33FFFFFF); // 20% opacity white
+  static const Color white10 = Color(0x1AFFFFFF); // 10% opacity white
+  static const Color white5 = Color(0x0DFFFFFF); // 5% opacity white
+
   //-------------------- Sentiment colours ------------------//
   static const Color sentimentNegative = Color(0xFFC31E07);
   static const Color sentimentPositive = Color(0xFF09A158);
@@ -102,7 +129,6 @@ class AppColorConstants {
   static const Color icons = Color(0xFFB3B3B3);
 
   static const Color systemArea = Colors.black;
-  static Color backGround = Colors.grey.shade50;
   static const Color appbar = Color.fromARGB(255, 39, 38, 38);
   static const Color bottomNavigation = Color.fromARGB(255, 39, 38, 38);
   static const Color icon = Colors.white;
@@ -110,5 +136,4 @@ class AppColorConstants {
   static const Color selectedItemColor = Colors.white;
   static const Color unselectedItemColor = Colors.grey;
   static Color textfieldBorderSide = Colors.white;
-  static Color textfieldcursorColor = Colors.grey;
 }

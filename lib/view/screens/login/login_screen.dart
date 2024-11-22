@@ -126,7 +126,7 @@ class LoginScreen extends StatelessWidget {
                   borderRadius: 40,
                   vertical: 8,
                   onTap: () {
-                    Get.to(() => const DashboardScreen());
+                    Get.to(() => DashboardScreen());
                   },
                 ),
                 const SizedBox(height: 20),

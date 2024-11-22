@@ -9,10 +9,13 @@ class CommonButton extends StatelessWidget {
   final Function() onTap;
   final bool isActive;
   final Color? buttonColor;
+  final Color? textcolor;
   final bool isLoding;
   final double borderRadius;
   final double horizontal;
   final double vertical;
+  final double? width;
+  final double? fontSize;
   const CommonButton({
     super.key,
     required this.title,
@@ -24,6 +27,9 @@ class CommonButton extends StatelessWidget {
     this.borderRadius = 10,
     this.vertical = 15,
     this.horizontal = 15,
+    this.width,
+    this.textcolor,
+    this.fontSize,
   });
 
   @override
@@ -31,6 +37,7 @@ class CommonButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: width,
         decoration: BoxDecoration(
             color: buttonColor ??
                 (isActive
@@ -65,10 +72,11 @@ class CommonButton extends StatelessWidget {
                       title,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: isActive
-                              ? AppColorConstants.white
-                              : AppColorConstants.contentSecondary),
+                          fontSize: fontSize ?? 16,
+                          color: textcolor ??
+                              (isActive
+                                  ? AppColorConstants.white
+                                  : AppColorConstants.contentSecondary)),
                     ),
                   ),
                 ],
@@ -88,10 +96,11 @@ class CommonButton extends StatelessWidget {
                       title,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: isActive
-                              ? AppColorConstants.white
-                              : AppColorConstants.contentSecondary),
+                          fontSize: fontSize ?? 16,
+                          color: textcolor ??
+                              (isActive
+                                  ? AppColorConstants.white
+                                  : AppColorConstants.contentSecondary)),
                     ),
           ],
         ),

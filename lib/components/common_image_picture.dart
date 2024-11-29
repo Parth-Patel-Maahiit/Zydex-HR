@@ -14,6 +14,7 @@ class CommonImagePicture extends StatelessWidget {
     this.isurl = false,
     this.type,
     this.color,
+    this.fit,
   });
   final dynamic name;
   final String? semanticsLabel;
@@ -22,6 +23,7 @@ class CommonImagePicture extends StatelessWidget {
   final bool isurl;
   final String? type;
   final Color? color;
+  final BoxFit? fit;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class CommonImagePicture extends StatelessWidget {
                           colorFilter: color != null
                               ? ColorFilter.mode(color!, BlendMode.srcIn)
                               : null,
-                          fit: BoxFit.scaleDown,
+                          fit: fit ?? BoxFit.scaleDown,
                           semanticsLabel: '$semanticsLabel',
                         )
                       : SvgPicture.asset(
@@ -59,7 +61,7 @@ class CommonImagePicture extends StatelessWidget {
                           colorFilter: color != null
                               ? ColorFilter.mode(color!, BlendMode.srcIn)
                               : null,
-                          fit: BoxFit.scaleDown,
+                          fit: fit ?? BoxFit.scaleDown,
                           semanticsLabel: '$semanticsLabel',
                         )
                   : isurl
@@ -68,7 +70,7 @@ class CommonImagePicture extends StatelessWidget {
                           height: size,
                           width: size,
                           color: color,
-                          fit: BoxFit.scaleDown,
+                          fit: fit ?? BoxFit.scaleDown,
                         )
                       : isString
                           ? Image.file(
@@ -76,14 +78,14 @@ class CommonImagePicture extends StatelessWidget {
                               height: size,
                               width: size,
                               color: color,
-                              fit: BoxFit.scaleDown,
+                              fit: fit ?? BoxFit.scaleDown,
                             )
                           : Image.asset(
                               name!,
                               height: size,
                               width: size,
                               color: color,
-                              fit: BoxFit.scaleDown,
+                              fit: fit ?? BoxFit.scaleDown,
                             )
               : const SizedBox(
                   height: 0,

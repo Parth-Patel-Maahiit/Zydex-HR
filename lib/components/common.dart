@@ -221,11 +221,11 @@ const List<String> stopstypeWithMapImages = [
   Images.breakcolorborderIcon
 ];
  */
-Widget divider() {
+Widget divider({bool isHeight = false}) {
   return Container(
       color: AppColorConstants.borderColor,
-      width: Dimensions.screenwidth,
-      height: 1.5);
+      width: isHeight ? 1.5 : Dimensions.screenwidth,
+      height: isHeight ? Dimensions.screenheight : 1.5);
 }
 
 /* route Optimization

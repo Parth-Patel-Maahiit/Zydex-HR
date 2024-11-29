@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zydex_hr/components/common.dart';
 import 'package:zydex_hr/components/common_button.dart';
 import 'package:zydex_hr/components/common_image_picture.dart';
 import 'package:zydex_hr/components/common_title_text.dart';
@@ -7,6 +8,7 @@ import 'package:zydex_hr/theme_controller.dart';
 import 'package:zydex_hr/util/app_color_constants.dart';
 import 'package:zydex_hr/util/dimensions.dart';
 import 'package:zydex_hr/util/images.dart';
+import 'package:zydex_hr/view/screens/dashboard/dashboard_controller.dart';
 
 import '../../../components/common_badges.dart';
 import 'widget/pageview_button_widget.dart';
@@ -14,6 +16,7 @@ import 'widget/rewards_widget.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
+
   final PageController _pageViewController = PageController();
 
   final List<Rewards> rewards = [
@@ -21,21 +24,22 @@ class DashboardScreen extends StatelessWidget {
         name: "Harsh Jadav",
         date: "11 oct 2024",
         fromName: "Parth Patel",
-        image: ""),
+        image: Images.demoImage),
     Rewards(
         name: "keyur patel",
         date: "11 oct 2024",
         fromName: "Parth Patel",
-        image: ""),
+        image: Images.demoImage),
     Rewards(
         name: "Nirav Darjee",
         date: "11 oct 2024",
         fromName: "Parth Patel",
-        image: "")
+        image: Images.demoImage)
   ];
 
   @override
   Widget build(BuildContext context) {
+    final dashboardController = Get.put(DashboardController());
     return Obx(() {
       return SafeArea(
         child: Scaffold(
@@ -98,197 +102,372 @@ class DashboardScreen extends StatelessWidget {
             ],
             bottom: appbarBottom(context),
           ),
-          body: Column(
-            children: [
-              commonTitleAndButton(
-                  title: "Rewards & Recognitions", buttonName: "View All"),
-              SizedBox(
-                height: 100,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    PageView(
-                      controller: _pageViewController,
-                      children: <Widget>[
-                        for (int i = 0; i < rewards.length; i++)
-                          RewardsWidget(
-                            name: rewards[i].name,
-                            image: rewards[i].image,
-                            date: rewards[i].date,
-                            fromName: rewards[i].fromName,
-                          ),
-                      ],
-                    ),
-                    PageviewButtonWidget(
-                      alignment: Alignment.centerLeft,
-                      icon: Icons.arrow_back_ios_new_outlined,
-                      onTap: () {
-                        int currentPage =
-                            _pageViewController.page?.round() ?? 0;
-                        if (currentPage > 0) {
-                          _pageViewController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
-                    ),
-                    PageviewButtonWidget(
-                      alignment: Alignment.centerRight,
-                      icon: Icons.arrow_forward_ios_rounded,
-                      borderRadius: const BorderRadiusDirectional.horizontal(
-                          start: Radius.circular(40)),
-                      onTap: () {
-                        int currentPage =
-                            _pageViewController.page?.round() ?? 0;
-                        if (currentPage < 2) {
-                          _pageViewController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
-                    ),
-                  ],
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                commonTitleAndButton(
+                    title: "Rewards & Recognitions", buttonName: "View All"),
+                SizedBox(
+                  height: 100,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      PageView(
+                        controller: _pageViewController,
+                        children: <Widget>[
+                          for (int i = 0; i < rewards.length; i++)
+                            RewardsWidget(
+                              name: rewards[i].name,
+                              image: rewards[i].image,
+                              date: rewards[i].date,
+                              fromName: rewards[i].fromName,
+                            ),
+                        ],
+                      ),
+                      PageviewButtonWidget(
+                        alignment: Alignment.centerLeft,
+                        icon: Icons.arrow_back_ios_new_outlined,
+                        onTap: () {
+                          int currentPage =
+                              _pageViewController.page?.round() ?? 0;
+                          if (currentPage > 0) {
+                            _pageViewController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                      ),
+                      PageviewButtonWidget(
+                        alignment: Alignment.centerRight,
+                        icon: Icons.arrow_forward_ios_rounded,
+                        borderRadius: const BorderRadiusDirectional.horizontal(
+                            start: Radius.circular(40)),
+                        onTap: () {
+                          int currentPage =
+                              _pageViewController.page?.round() ?? 0;
+                          if (currentPage < 2) {
+                            _pageViewController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              commonTitleAndButton(
-                  title: "Your Time & Attendance", buttonName: "View All"),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: AppColorConstants.baseBlackWhite),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                commonTitleAndButton(title: "Birthdays & Anniversaries"),
+                SizedBox(
+                  height: Dimensions.screenheight * 0.22,
+                  child: DefaultTabController(
+                    initialIndex: 1,
+                    length: 3,
+                    child: Column(
                       children: [
-                        Row(
-                          children: [
-                            const CommonImagePicture(
-                              Images.timepassingIcon,
-                              size: 40,
-                            ),
-                            const SizedBox(
-                              width: 6,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CommonTitleText(
-                                  title: "9.5",
-                                  fontSize: 22,
+                        Container(
+                          height: 35,
+                          margin: const EdgeInsets.symmetric(horizontal: 15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: AppColorConstants.baseBlackWhite),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: TabBar(
+                              labelColor: AppColorConstants.blue100,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              dividerColor: AppColorConstants.transparent,
+                              indicatorPadding: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
+                              labelPadding: EdgeInsets.zero,
+                              unselectedLabelColor:
+                                  AppColorConstants.textnormalColor,
+                              indicatorColor: AppColorConstants.blue100,
+                              onTap: (value) {
+                                if (value == 0) {
+                                  dashboardController.selectDays("yesterday");
+                                } else if (value == 1) {
+                                  dashboardController.selectDays("today");
+                                } else {
+                                  dashboardController.selectDays("tomorrow");
+                                }
+                              },
+                              labelStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                              tabs: [
+                                const Tab(text: "Yesterday"),
+                                Tab(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      divider(isHeight: true),
+                                      const Text("Today"),
+                                      divider(isHeight: true),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  "Spent Today",
-                                  style: TextStyle(
-                                      color: AppColorConstants.textnormalColor,
-                                      fontSize: 12),
-                                ),
+                                const Tab(text: "Tomorrow"),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Text(
-                          "2 Absences in this month",
-                          style: TextStyle(
-                              color: AppColorConstants.textnormalColor,
-                              fontSize: 12),
-                        ),
-                        Text(
-                          "2182.00 Maternity Leaves Avilable",
-                          style: TextStyle(
-                              color: AppColorConstants.textnormalColor,
-                              fontSize: 12),
-                        ),
-                        Text(
-                          "No Other Leaves avilable",
-                          style: TextStyle(
-                              color: AppColorConstants.textnormalColor,
-                              fontSize: 12),
+                        Expanded(
+                          child: buildBirthdayList(
+                              dashboardController.currentBirthdays),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Column(
-                      children: [
-                        CommonButton(
-                            title: "Apply Leave",
-                            buttonColor: AppColorConstants.sentimentPositive,
-                            width: Dimensions.screenwidth * 0.35,
-                            vertical: 5,
-                            borderRadius: 40,
-                            fontSize: 14,
-                            textcolor: AppColorConstants.black100,
-                            onTap: () {}),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        CommonButton(
-                            title: "Regularize",
-                            buttonColor: AppColorConstants.sentimentNegative,
-                            vertical: 5,
-                            width: Dimensions.screenwidth * 0.35,
-                            borderRadius: 40,
-                            fontSize: 14,
-                            onTap: () {}),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        CommonButton(
-                            title: "Apply Outdoor",
-                            textcolor: AppColorConstants.black100,
-                            buttonColor: AppColorConstants.sentimentWarning,
-                            vertical: 4,
-                            width: Dimensions.screenwidth * 0.35,
-                            borderRadius: 40,
-                            fontSize: 14,
-                            onTap: () {}),
-                      ],
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              commonTitleAndButton(
-                  title: "Your Learning Summary", buttonName: "View All"),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: AppColorConstants.baseBlackWhite,
+                commonTitleAndButton(
+                    title: "Your Time & Attendance", buttonName: "View All"),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppColorConstants.baseBlackWhite),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const CommonImagePicture(
+                                Images.timepassingIcon,
+                                size: 40,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const CommonTitleText(
+                                    title: "9.5",
+                                    fontSize: 22,
+                                  ),
+                                  Text(
+                                    "Spent Today",
+                                    style: TextStyle(
+                                        color:
+                                            AppColorConstants.textnormalColor,
+                                        fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Text(
+                            "2 Absences in this month",
+                            style: TextStyle(
+                                color: AppColorConstants.textnormalColor,
+                                fontSize: 12),
+                          ),
+                          Text(
+                            "2182.00 Maternity Leaves Avilable",
+                            style: TextStyle(
+                                color: AppColorConstants.textnormalColor,
+                                fontSize: 12),
+                          ),
+                          Text(
+                            "No Other Leaves avilable",
+                            style: TextStyle(
+                                color: AppColorConstants.textnormalColor,
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Column(
+                        children: [
+                          CommonButton(
+                              title: "Apply Leave",
+                              buttonColor: AppColorConstants.sentimentPositive,
+                              width: Dimensions.screenwidth * 0.35,
+                              vertical: 5,
+                              borderRadius: 40,
+                              fontSize: 14,
+                              textcolor: AppColorConstants.black100,
+                              onTap: () {}),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          CommonButton(
+                              title: "Regularize",
+                              buttonColor: AppColorConstants.sentimentNegative,
+                              vertical: 5,
+                              width: Dimensions.screenwidth * 0.35,
+                              borderRadius: 40,
+                              fontSize: 14,
+                              onTap: () {}),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          CommonButton(
+                              title: "Apply Outdoor",
+                              textcolor: AppColorConstants.black100,
+                              buttonColor: AppColorConstants.sentimentWarning,
+                              vertical: 4,
+                              width: Dimensions.screenwidth * 0.35,
+                              borderRadius: 40,
+                              fontSize: 14,
+                              onTap: () {}),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    commonLearningItem(
-                        image: Images.rewardIcon,
-                        count: "6",
-                        title: "Modules are Completed"),
-                    commonLearningItem(
-                        image: Images.tasklistIcon,
-                        count: "146",
-                        title: "Total Modules To Do"),
-                    commonLearningItem(
-                        isSVG: false,
-                        image: Images.modulesdoneIcon,
-                        count: "4.11%",
-                        size: 30,
-                        title: "Modules Done Percentage"),
-                  ],
+                commonTitleAndButton(
+                    title: "Your Learning Summary", buttonName: "View All"),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: AppColorConstants.baseBlackWhite,
+                  ),
+                  child: Row(
+                    children: [
+                      commonLearningItem(
+                          image: Images.rewardIcon,
+                          count: "6",
+                          title: "Modules are Completed"),
+                      commonLearningItem(
+                          image: Images.tasklistIcon,
+                          count: "146",
+                          title: "Total Modules To Do"),
+                      commonLearningItem(
+                          isSVG: false,
+                          image: Images.modulesdoneIcon,
+                          count: "4.11%",
+                          size: 30,
+                          title: "Modules Done Percentage"),
+                    ],
+                  ),
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         ),
       );
     });
+  }
+
+  Widget buildBirthdayList(List<Birthday> birthdays) {
+    if (birthdays.isEmpty) {
+      return const Center(
+        child: Text(
+          "No Birthdays 🎂",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      scrollDirection: Axis.horizontal,
+      itemCount: birthdays.length,
+      itemBuilder: (context, index) {
+        return SizedBox(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: AppColorConstants.baseBlackWhite),
+                  width: Dimensions.screenwidth * 0.45,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CommonImagePicture(
+                            Images.cackIcon,
+                            type: "SVG",
+                            size: 30,
+                            color: AppColorConstants.iconColor,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        birthdays[index].titel + birthdays[index].name,
+                        style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: AppColorConstants.textColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "SEND WISHES",
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: AppColorConstants.blue100,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          CommonImagePicture(
+                            Images.rightarrowIcon,
+                            size: 20,
+                            color: AppColorConstants.blue100,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 20,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.asset(
+                      Images.demoImage,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Container(
+          width: 15,
+        );
+      },
+    );
   }
 
   Widget commonLearningItem(

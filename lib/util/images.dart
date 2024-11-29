@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Images {
   static const String splashAnimation = 'assets/animation/AnimationSplash.json';
   static const String companyLogo = "assets/logos/Zydex_Road.png";
+  static const String demoImage= "assets/images/demoImage.jpeg";
 
   // -------------------- icons ------------------------------
   static const String backArrowIcon = "assets/svg_icons/backarrow-icon.svg";
@@ -17,4 +18,5 @@ class Images {
   static const String rewardIcon = "assets/svg_icons/reward-icon.svg";
   static const String tasklistIcon = "assets/svg_icons/tasklist-icon.svg";
   static const String modulesdoneIcon = "assets/icons/modulesdone-icon.png";
+  static const String cackIcon = "assets/svg_icons/cack-icon.svg";
 }

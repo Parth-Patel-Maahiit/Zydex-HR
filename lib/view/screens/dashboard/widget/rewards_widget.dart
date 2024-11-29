@@ -25,7 +25,7 @@ class RewardsWidget extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(2),
             color: AppColorConstants.baseBlackWhite),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -45,8 +45,8 @@ class RewardsWidget extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(60),
                   child: CommonImagePicture(
-                    Icons.person,
-                    color: AppColorConstants.iconColor,
+                    fit: BoxFit.cover,
+                    image,
                     size: 40,
                   ),
                 ),

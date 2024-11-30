@@ -11,6 +11,8 @@ import 'package:zydex_hr/util/images.dart';
 import 'package:zydex_hr/view/screens/dashboard/dashboard_controller.dart';
 
 import '../../../components/common_badges.dart';
+import '../drawer/drawer_controller.dart';
+import '../drawer/drawer_screen.dart';
 import 'widget/pageview_button_widget.dart';
 import 'widget/rewards_widget.dart';
 
@@ -36,332 +38,315 @@ class DashboardScreen extends StatelessWidget {
         fromName: "Parth Patel",
         image: Images.demoImage)
   ];
+  final drawerController = Get.put(DrawerControllerGet());
 
   @override
   Widget build(BuildContext context) {
     final dashboardController = Get.put(DashboardController());
-    return Obx(() {
-      return SafeArea(
-        child: Scaffold(
-          drawer: Drawer(
-            child: Container(
-              color: Colors.red,
-              child: const Center(
-                child: Text(
-                  "Drawer Content",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+    return DrawerScreen(
+      child: Scaffold(
+        backgroundColor: AppColorConstants.backGround,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: AppColorConstants.blue100.withOpacity(0.88),
+          leading: IconButton(
+            icon: const CommonImagePicture(
+              Images.drawermenuIcon,
+              color: AppColorConstants.white,
+              type: "SVG",
             ),
+            onPressed: () {
+              drawerController.showDrawer();
+            },
           ),
-          backgroundColor: AppColorConstants.backGround,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: AppColorConstants.blue100.withOpacity(0.88),
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  icon: const CommonImagePicture(
-                    Images.drawermenuIcon,
+          titleSpacing: 0,
+          title: const CommonTitleText(
+            title: "Home",
+            color: AppColorConstants.white,
+          ),
+          actions: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.brightness_6,
                     color: AppColorConstants.white,
-                    type: "SVG",
                   ),
                   onPressed: () {
-                    Scaffold.of(context).openDrawer();
+                    Get.find<ThemeController>().toggleTheme();
                   },
-                );
-              },
+                ),
+                const CommonBadges(
+                  labeltext: "99+",
+                  imageName: Images.taskIcon,
+                ),
+                const CommonBadges(
+                  labeltext: "99+",
+                  imageName: Images.notificationIcon,
+                ),
+              ],
             ),
-            titleSpacing: 0,
-            title: const CommonTitleText(
-              title: "Home",
-              color: AppColorConstants.white,
-            ),
-            actions: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.brightness_6,
-                      color: AppColorConstants.white,
+          ],
+          bottom: appbarBottom(context),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              commonTitleAndButton(
+                  title: "Rewards & Recognitions", buttonName: "View All"),
+              SizedBox(
+                height: 100,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: <Widget>[
+                    PageView(
+                      controller: _pageViewController,
+                      children: <Widget>[
+                        for (int i = 0; i < rewards.length; i++)
+                          RewardsWidget(
+                            name: rewards[i].name,
+                            image: rewards[i].image,
+                            date: rewards[i].date,
+                            fromName: rewards[i].fromName,
+                          ),
+                      ],
                     ),
-                    onPressed: () {
-                      Get.find<ThemeController>().toggleTheme();
-                    },
-                  ),
-                  const CommonBadges(
-                    labeltext: "99+",
-                    imageName: Images.taskIcon,
-                  ),
-                  const CommonBadges(
-                    labeltext: "99+",
-                    imageName: Images.notificationIcon,
-                  ),
-                ],
+                    PageviewButtonWidget(
+                      alignment: Alignment.centerLeft,
+                      icon: Icons.arrow_back_ios_new_outlined,
+                      onTap: () {
+                        int currentPage =
+                            _pageViewController.page?.round() ?? 0;
+                        if (currentPage > 0) {
+                          _pageViewController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      },
+                    ),
+                    PageviewButtonWidget(
+                      alignment: Alignment.centerRight,
+                      icon: Icons.arrow_forward_ios_rounded,
+                      borderRadius: const BorderRadiusDirectional.horizontal(
+                          start: Radius.circular(40)),
+                      onTap: () {
+                        int currentPage =
+                            _pageViewController.page?.round() ?? 0;
+                        if (currentPage < 2) {
+                          _pageViewController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ],
-            bottom: appbarBottom(context),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                commonTitleAndButton(
-                    title: "Rewards & Recognitions", buttonName: "View All"),
-                SizedBox(
-                  height: 100,
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: <Widget>[
-                      PageView(
-                        controller: _pageViewController,
-                        children: <Widget>[
-                          for (int i = 0; i < rewards.length; i++)
-                            RewardsWidget(
-                              name: rewards[i].name,
-                              image: rewards[i].image,
-                              date: rewards[i].date,
-                              fromName: rewards[i].fromName,
-                            ),
-                        ],
+              commonTitleAndButton(title: "Birthdays & Anniversaries"),
+              SizedBox(
+                height: Dimensions.screenheight * 0.22,
+                child: DefaultTabController(
+                  initialIndex: 1,
+                  length: 3,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 35,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: AppColorConstants.baseBlackWhite),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: TabBar(
+                            labelColor: AppColorConstants.blue100,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            dividerColor: AppColorConstants.transparent,
+                            indicatorPadding: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
+                            labelPadding: EdgeInsets.zero,
+                            unselectedLabelColor:
+                                AppColorConstants.textnormalColor,
+                            indicatorColor: AppColorConstants.blue100,
+                            onTap: (value) {
+                              if (value == 0) {
+                                dashboardController.selectDays("yesterday");
+                              } else if (value == 1) {
+                                dashboardController.selectDays("today");
+                              } else {
+                                dashboardController.selectDays("tomorrow");
+                              }
+                            },
+                            labelStyle: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                            tabs: [
+                              const Tab(text: "Yesterday"),
+                              Tab(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    divider(isHeight: true),
+                                    const Text("Today"),
+                                    divider(isHeight: true),
+                                  ],
+                                ),
+                              ),
+                              const Tab(text: "Tomorrow"),
+                            ],
+                          ),
+                        ),
                       ),
-                      PageviewButtonWidget(
-                        alignment: Alignment.centerLeft,
-                        icon: Icons.arrow_back_ios_new_outlined,
-                        onTap: () {
-                          int currentPage =
-                              _pageViewController.page?.round() ?? 0;
-                          if (currentPage > 0) {
-                            _pageViewController.previousPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
-                      ),
-                      PageviewButtonWidget(
-                        alignment: Alignment.centerRight,
-                        icon: Icons.arrow_forward_ios_rounded,
-                        borderRadius: const BorderRadiusDirectional.horizontal(
-                            start: Radius.circular(40)),
-                        onTap: () {
-                          int currentPage =
-                              _pageViewController.page?.round() ?? 0;
-                          if (currentPage < 2) {
-                            _pageViewController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
+                      Expanded(
+                        child: buildBirthdayList(
+                            dashboardController.currentBirthdays),
                       ),
                     ],
                   ),
                 ),
-                commonTitleAndButton(title: "Birthdays & Anniversaries"),
-                SizedBox(
-                  height: Dimensions.screenheight * 0.22,
-                  child: DefaultTabController(
-                    initialIndex: 1,
-                    length: 3,
-                    child: Column(
+              ),
+              commonTitleAndButton(
+                  title: "Your Time & Attendance", buttonName: "View All"),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: AppColorConstants.baseBlackWhite),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 35,
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: AppColorConstants.baseBlackWhite),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(2),
-                            child: TabBar(
-                              labelColor: AppColorConstants.blue100,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              dividerColor: AppColorConstants.transparent,
-                              indicatorPadding: EdgeInsets.zero,
-                              padding: EdgeInsets.zero,
-                              labelPadding: EdgeInsets.zero,
-                              unselectedLabelColor:
-                                  AppColorConstants.textnormalColor,
-                              indicatorColor: AppColorConstants.blue100,
-                              onTap: (value) {
-                                if (value == 0) {
-                                  dashboardController.selectDays("yesterday");
-                                } else if (value == 1) {
-                                  dashboardController.selectDays("today");
-                                } else {
-                                  dashboardController.selectDays("tomorrow");
-                                }
-                              },
-                              labelStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
-                              tabs: [
-                                const Tab(text: "Yesterday"),
-                                Tab(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      divider(isHeight: true),
-                                      const Text("Today"),
-                                      divider(isHeight: true),
-                                    ],
-                                  ),
+                        Row(
+                          children: [
+                            const CommonImagePicture(
+                              Images.timepassingIcon,
+                              size: 40,
+                            ),
+                            const SizedBox(
+                              width: 6,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CommonTitleText(
+                                  title: "9.5",
+                                  fontSize: 22,
                                 ),
-                                const Tab(text: "Tomorrow"),
+                                Text(
+                                  "Spent Today",
+                                  style: TextStyle(
+                                      color: AppColorConstants.textnormalColor,
+                                      fontSize: 12),
+                                ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
-                        Expanded(
-                          child: buildBirthdayList(
-                              dashboardController.currentBirthdays),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        Text(
+                          "2 Absences in this month",
+                          style: TextStyle(
+                              color: AppColorConstants.textnormalColor,
+                              fontSize: 12),
+                        ),
+                        Text(
+                          "2182.00 Maternity Leaves Avilable",
+                          style: TextStyle(
+                              color: AppColorConstants.textnormalColor,
+                              fontSize: 12),
+                        ),
+                        Text(
+                          "No Other Leaves avilable",
+                          style: TextStyle(
+                              color: AppColorConstants.textnormalColor,
+                              fontSize: 12),
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    Column(
+                      children: [
+                        CommonButton(
+                            title: "Apply Leave",
+                            buttonColor: AppColorConstants.sentimentPositive,
+                            width: Dimensions.screenwidth * 0.35,
+                            vertical: 5,
+                            borderRadius: 40,
+                            fontSize: 14,
+                            textcolor: AppColorConstants.black100,
+                            onTap: () {}),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CommonButton(
+                            title: "Regularize",
+                            buttonColor: AppColorConstants.sentimentNegative,
+                            vertical: 5,
+                            width: Dimensions.screenwidth * 0.35,
+                            borderRadius: 40,
+                            fontSize: 14,
+                            onTap: () {}),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CommonButton(
+                            title: "Apply Outdoor",
+                            textcolor: AppColorConstants.black100,
+                            buttonColor: AppColorConstants.sentimentWarning,
+                            vertical: 4,
+                            width: Dimensions.screenwidth * 0.35,
+                            borderRadius: 40,
+                            fontSize: 14,
+                            onTap: () {}),
+                      ],
+                    )
+                  ],
                 ),
-                commonTitleAndButton(
-                    title: "Your Time & Attendance", buttonName: "View All"),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
-                      color: AppColorConstants.baseBlackWhite),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const CommonImagePicture(
-                                Images.timepassingIcon,
-                                size: 40,
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const CommonTitleText(
-                                    title: "9.5",
-                                    fontSize: 22,
-                                  ),
-                                  Text(
-                                    "Spent Today",
-                                    style: TextStyle(
-                                        color:
-                                            AppColorConstants.textnormalColor,
-                                        fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            "2 Absences in this month",
-                            style: TextStyle(
-                                color: AppColorConstants.textnormalColor,
-                                fontSize: 12),
-                          ),
-                          Text(
-                            "2182.00 Maternity Leaves Avilable",
-                            style: TextStyle(
-                                color: AppColorConstants.textnormalColor,
-                                fontSize: 12),
-                          ),
-                          Text(
-                            "No Other Leaves avilable",
-                            style: TextStyle(
-                                color: AppColorConstants.textnormalColor,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 6,
-                      ),
-                      Column(
-                        children: [
-                          CommonButton(
-                              title: "Apply Leave",
-                              buttonColor: AppColorConstants.sentimentPositive,
-                              width: Dimensions.screenwidth * 0.35,
-                              vertical: 5,
-                              borderRadius: 40,
-                              fontSize: 14,
-                              textcolor: AppColorConstants.black100,
-                              onTap: () {}),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          CommonButton(
-                              title: "Regularize",
-                              buttonColor: AppColorConstants.sentimentNegative,
-                              vertical: 5,
-                              width: Dimensions.screenwidth * 0.35,
-                              borderRadius: 40,
-                              fontSize: 14,
-                              onTap: () {}),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          CommonButton(
-                              title: "Apply Outdoor",
-                              textcolor: AppColorConstants.black100,
-                              buttonColor: AppColorConstants.sentimentWarning,
-                              vertical: 4,
-                              width: Dimensions.screenwidth * 0.35,
-                              borderRadius: 40,
-                              fontSize: 14,
-                              onTap: () {}),
-                        ],
-                      )
-                    ],
-                  ),
+              ),
+              commonTitleAndButton(
+                  title: "Your Learning Summary", buttonName: "View All"),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: AppColorConstants.baseBlackWhite,
                 ),
-                commonTitleAndButton(
-                    title: "Your Learning Summary", buttonName: "View All"),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 15),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: AppColorConstants.baseBlackWhite,
-                  ),
-                  child: Row(
-                    children: [
-                      commonLearningItem(
-                          image: Images.rewardIcon,
-                          count: "6",
-                          title: "Modules are Completed"),
-                      commonLearningItem(
-                          image: Images.tasklistIcon,
-                          count: "146",
-                          title: "Total Modules To Do"),
-                      commonLearningItem(
-                          isSVG: false,
-                          image: Images.modulesdoneIcon,
-                          count: "4.11%",
-                          size: 30,
-                          title: "Modules Done Percentage"),
-                    ],
-                  ),
+                child: Row(
+                  children: [
+                    commonLearningItem(
+                        image: Images.rewardIcon,
+                        count: "6",
+                        title: "Modules are Completed"),
+                    commonLearningItem(
+                        image: Images.tasklistIcon,
+                        count: "146",
+                        title: "Total Modules To Do"),
+                    commonLearningItem(
+                        isSVG: false,
+                        image: Images.modulesdoneIcon,
+                        count: "4.11%",
+                        size: 30,
+                        title: "Modules Done Percentage"),
+                  ],
                 ),
-                const SizedBox(
-                  height: 20,
-                )
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget buildBirthdayList(List<Birthday> birthdays) {
